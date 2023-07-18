@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 using Dapper;
+using HUST.Core.Models.Entity;
 using Thu6.model;
 
 public class DataAccess
@@ -72,13 +73,11 @@ public class DataAccess
             UPDATE [user]
             SET status = @Status
             WHERE user_id = @UserId";
-
             var parameters = new
             {
                 Status=user.Status,
                 UserId = user.User_id
             };
-
             return Execute(query, parameters);
         
     }
@@ -119,6 +118,29 @@ public class DataAccess
             user.Birthday,
             user.Position,
             user.Avatar
+        };
+
+        return Execute(query, parameters);
+
+    }
+    public int SaveLogs(SaveLogModel log,string user_id)
+    {
+        var h = new CryptoHelper();
+        var id= h.GenerateRandomId();
+        var query = @"
+            INSERT INTO [dbo].[audit_log]([audit_log_id],[user_id],[screen_info],[action_type],[reference],[description],[created_at])
+            VALUES(@id,@user_id,@screen_info,@action_type,@reference,@description,@created_at)";
+
+        var parameters = new
+        {   
+            id,
+            log.screen_info,
+            log.action_type,
+            log.reference,
+            log.description,
+            created_at = DateTime.Now,
+
+            user_id
         };
 
         return Execute(query, parameters);

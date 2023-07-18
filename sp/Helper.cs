@@ -24,5 +24,6 @@ public class Helper
         // Kiểm tra khớp mật khẩu với quy tắc
         return Regex.IsMatch(password, pattern);
     }
+
     
 }
