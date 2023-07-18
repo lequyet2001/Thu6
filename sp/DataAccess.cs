@@ -40,7 +40,15 @@ public class DataAccess
             return connection.Query<T>(query, parameters);
         }
     }
-  
+    public List<T> QueryList<T>(string query, object parameters = null)
+    {
+        using (var connection = CreateConnection())
+        {
+            return connection.Query<T>(query, parameters).ToList();
+        }
+    }
+
+
 
     // Các phương thức thực hiện các tác vụ thêm, sửa, xóa dữ liệu khác...
 
